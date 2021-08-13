@@ -24,4 +24,9 @@ img2=img.convert('L')
 
 #rotate a picture
 img3=img.rotate(180)
-img3.show()
+#img3.show()
+
+#thumbnail
+img.show()
+img.thumbnail((200,200))
+img.show()
