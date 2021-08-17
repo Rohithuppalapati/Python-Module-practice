@@ -17,9 +17,9 @@ def request_url(to_check):
 # Writing function to check count of how many times password was hacked
 
 def password_leaks_count(hashes, hash_to_check):
-    hashes = (line.split(':') for line in hashes.text.splitlines())
-    for h, count in hashes:
-        if h == hash_to_check:
+    hash_checker = (lines.split(':') for lines in hashes.text.splitlines())
+    for hash,count in hash_checker:
+        if hash == hash_to_check:
             return count
     return 0
 
@@ -48,5 +48,3 @@ def main(args):
 if __name__ == '__main__':
     list1 = ['123', 'happy123']
     main(list1)
-
-
