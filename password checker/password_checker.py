@@ -1,29 +1,52 @@
-# importing required packages as requests(deals with url response) and hashlib(to generate hash codes for passwords)
+# importing hashlib(generates hashcodes for pwds) and requests(ping a url and get response code)
 
-import requests
 import hashlib
+import requests
 
-# function to hit url and check for status code
+
+# Writing function for URL that needs to be checked get response code and password given which needs to be verified
+
 def request_url(to_check):
-    url='https://api.pwnedpasswords.com/range/' + to_check
-    response=requests.get(url)
+    url = 'https://api.pwnedpasswords.com/range/' + to_check
+    response = requests.get(url)
     if response.status_code != 200:
-        raise RuntimeError(f'please check the url its throwing {response.status_code} and enter again')
+        raise RuntimeError(f'please check url that you have given it is throwing {response.status_code} error')
     return response
 
-# code to check pawned pwd by giving hash codes to check for pawned stats
-def password_leaks_count(hashes,hash_to_check):
-    hashes= (lines.split(':') for lines in hashes.text.splitlines())
-    for h,count in hashes:
-        print(h,count)
 
-# code to convert input pwd to hashcode and check for pawning
-def pawned_api_check(password):
-    sha1password=hashlib.sha1(password.encode('utf-8')).hexdigest()
-    first_5_char,tail=sha1password[:5],sha1password[5:]
-    resp=request_url(first_5_char)
-    print(resp)
-    return password_leaks_count(resp,tail)
+# Writing function to check count of how many times password was hacked
+
+def password_leaks_count(hashes, hash_to_check):
+    hashes = (line.split(':') for line in hashes.text.splitlines())
+    for h, count in hashes:
+        if h == hash_to_check:
+            return count
+    return 0
 
 
-pawned_api_check('123')
+# Writing function to check pawned password(also convert password to hash code in hexadecimal)
+
+def pawned_password_checker(password):
+    sha1password = (hashlib.sha1(password.encode('utf-8')).hexdigest().upper())
+    first_5char, tail = sha1password[:5], sha1password[5:]
+    resp = request_url(first_5char)
+    return password_leaks_count(resp, tail)
+
+# writing main function to execute pawned_password_checker function
+
+def main(args):
+    for password in args:
+        count = pawned_password_checker(password)
+        if count:
+            print(f'your {password} has been hacked {count} times please change it ')
+        else:
+            print('password not found carry on ......')
+
+
+# calling main func to run program
+
+if __name__ == '__main__':
+    list1 = ['123', 'happy123']
+    main(list1)
+
+
