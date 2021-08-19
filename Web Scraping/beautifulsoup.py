@@ -25,3 +25,5 @@ votes=soup.select('.score')[3]
 links=soup.select('.storylink')[4]
 #print(links)
 
+
+
