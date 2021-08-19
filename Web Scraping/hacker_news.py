@@ -1,7 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
+import pprint
 
 # Url to check and scrap
+
 url='https://news.ycombinator.com/'
 response=requests.get(url)
 if response.status_code == 200:
@@ -16,19 +18,21 @@ subtext=soup.select('.subtext')
 
 
 #function to  get custom hacker news feed of over 100 votes
+
 def custom_hn(links,subtext):
     hn=[]
     for index,items in enumerate(links):
-        title=links[index].getText()
-        href=links[index].get('href',None)
+        title=items.getText()
+        href=items.get('href',None)
         vote=subtext[index].select('.score')
         if len(vote):
             points=int(vote[0].getText().replace(' points',''))
-            hn.append({'title':title,'links':href,'votes':points})
+            if points>99:
+                hn.append({'title':title,'links':href,'votes':points})
 
     return hn
 
+pprint.pprint(custom_hn(links,subtext))
 
-print(custom_hn(links,subtext))
 
 
