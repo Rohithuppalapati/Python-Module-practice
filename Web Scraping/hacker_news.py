@@ -30,7 +30,8 @@ def custom_hn(links,subtext):
             if points>99:
                 hn.append({'title':title,'links':href,'votes':points})
 
-    return hn
+# desecending order sorted
+    return sorted(hn,key=lambda k:k['votes'],reverse=True)
 
 pprint.pprint(custom_hn(links,subtext))
 
